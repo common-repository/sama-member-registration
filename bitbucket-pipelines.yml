@@ -1,0 +1,19 @@
+# This is an example Starter pipeline configuration
+# Use a skeleton to build, test and deploy using manual and parallel steps
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+
+image: php:7.1.1
+
+pipelines:
+  default:
+    - step:
+        script:
+          - apt-get update && apt-get install -y --force-yes unzip
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          - composer require squizlabs/php_codesniffer
+          - composer require wp-coding-standards/wpcs
+          - vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs          
+          - vendor/bin/phpcs -i
+          - vendor/bin/phpcs --standard=WordPress views
+
